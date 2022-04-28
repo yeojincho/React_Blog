@@ -8,46 +8,90 @@ function App() {
     "인강 추천",
   ]);
 
-  let [like, setLike] = useState(0);
+  let [like, setLike] = useState([0, 0, 0]);
+  let [modal, setModal] = useState(false);
+  let [titleIndex, setTitleIndex] = useState(0);
 
-  const changeTitle = () => {
-    var newArray = [...title]; //var newArray = title; 이거는 값 공유(얕은 복사)이기때문에 하면 안된다.
-    newArray[0] = "타입스크립트 궁금해";
-    setTitle(newArray);
-  };
+  const chgTitle = ()=>{
+    let copy = [...title];
+    copy[0] = '아침햇살 맛있다';
+    setTitle(copy);
+  }
 
   return (
     <div className="App">
       <div className="black-nav">
         <div>개발 Blog</div>
       </div>
-      <button onClick={changeTitle}>버튼</button>
-      <div className="list">
+      {/* <div className="list">
         <h3>
           {title[0]}
-          <span
-            className="like-btn"
-            onClick={() => {
-              setLike(like + 1);
-            }}
-          >
+          <span className="like-btn" onClick={changeLike}>
             👍🏻
           </span>
-          {like}
+          {like[0]}
         </h3>
         <p>2월 17일 발행</p>
-        <hr />
       </div>
       <div className="list">
-        <h3>{title[1]}</h3>
+        <h3>
+        {title[1]}
+        <span className="like-btn" onClick={changeLike}>
+            👍🏻
+          </span>
+          {like[1]}
+        </h3>
         <p>2월 17일 발행</p>
-        <hr />
       </div>
       <div className="list">
-        <h3>{title[2]}</h3>
+        <h3>
+        {title[2]}
+        <span className="like-btn" onClick={changeLike}>
+            👍🏻
+          </span>
+          {like[2]}
+        </h3>
         <p>2월 17일 발행</p>
-        <hr />
-      </div>
+      </div> */}
+
+      {
+        title.map((a, i)=>{
+          return (
+            <div className="list" key={i}>
+              <h3 onClick={()=>{setModal(true)}}>{title[i]} 
+              <span className="like-btn" onClick={()=>{
+                let copy = [...like];
+                copy[i] = copy[i] + 1;
+                setLike(copy);
+              }}>
+              👍🏻
+              </span>
+          {like[i]}</h3>
+              <p>2월 17일 발행</p>
+          </div>
+          )
+        })
+      }
+
+      {/* <button onClick={() => { setModal(!modal);}} >
+        모달창
+      </button> */}
+
+      <button onClick={()=>{setTitleIndex(0)}}>title1</button>
+      <button onClick={()=>{setTitleIndex(1)}}>title2</button>
+      <button onClick={()=>{setTitleIndex(2)}}>title3</button>
+
+      {modal == true ? <Modal t={title} titleIndex={titleIndex}/> : null}
+    </div>
+  );
+}
+function Modal(props) {
+  return (
+    <div className="modal">
+      <h2>{props.t[props.titleIndex]}</h2>
+      <p>날짜</p>
+      <p>상세내용</p>
+      <button onClick={props.chg}>글수정</button>
     </div>
   );
 }
