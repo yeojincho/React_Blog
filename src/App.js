@@ -11,75 +11,48 @@ function App() {
   let [like, setLike] = useState([0, 0, 0]);
   let [modal, setModal] = useState(false);
   let [titleIndex, setTitleIndex] = useState(0);
-
-  const chgTitle = ()=>{
-    let copy = [...title];
-    copy[0] = '아침햇살 맛있다';
-    setTitle(copy);
-  }
+  let [입력값, 입력값변경] = useState('');
 
   return (
     <div className="App">
       <div className="black-nav">
         <div>개발 Blog</div>
       </div>
-      {/* <div className="list">
-        <h3>
-          {title[0]}
-          <span className="like-btn" onClick={changeLike}>
-            👍🏻
-          </span>
-          {like[0]}
-        </h3>
-        <p>2월 17일 발행</p>
-      </div>
-      <div className="list">
-        <h3>
-        {title[1]}
-        <span className="like-btn" onClick={changeLike}>
-            👍🏻
-          </span>
-          {like[1]}
-        </h3>
-        <p>2월 17일 발행</p>
-      </div>
-      <div className="list">
-        <h3>
-        {title[2]}
-        <span className="like-btn" onClick={changeLike}>
-            👍🏻
-          </span>
-          {like[2]}
-        </h3>
-        <p>2월 17일 발행</p>
-      </div> */}
 
       {
         title.map((a, i)=>{
           return (
             <div className="list" key={i}>
-              <h3 onClick={()=>{setModal(true)}}>{title[i]} 
-              <span className="like-btn" onClick={()=>{
+              <h3 onClick={()=>{setModal(true); setTitleIndex(i);}}>{title[i]} 
+
+              <span className="like-btn" onClick={(e)=>{
+                e.stopPropagation();
                 let copy = [...like];
                 copy[i] = copy[i] + 1;
                 setLike(copy);
-              }}>
-              👍🏻
+                }}>
+                👍🏻
               </span>
-          {like[i]}</h3>
+
+                {like[i]}
+              </h3>
               <p>2월 17일 발행</p>
+              <button onClick={()=>{
+                let 복사 = [...title];
+                복사.splice(i, 1);
+                setTitle(복사);
+              }}>삭제</button>
           </div>
           )
         })
       }
 
-      {/* <button onClick={() => { setModal(!modal);}} >
-        모달창
-      </button> */}
-
-      <button onClick={()=>{setTitleIndex(0)}}>title1</button>
-      <button onClick={()=>{setTitleIndex(1)}}>title2</button>
-      <button onClick={()=>{setTitleIndex(2)}}>title3</button>
+      <input type="text" onChange={(e)=>{입력값변경(e.target.value);}}/>
+      <button onClick={()=>{
+        let 복사 = [...title];
+        복사.unshift(입력값);
+        setTitle(복사);
+      }}>글발행</button>
 
       {modal == true ? <Modal t={title} titleIndex={titleIndex}/> : null}
     </div>
